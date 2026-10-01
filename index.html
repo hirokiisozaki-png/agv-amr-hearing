@@ -101,13 +101,13 @@ button:disabled{opacity:.6;cursor:wait}
 <div class="wrap">
   <header class="top">
     <h1>AGV/AMR導入ヒアリングシート</h1>
-    <p>該当する項目をタップして選択し、空欄には分かる範囲でご記入ください（全30項目）。<span class="legend">★</span>の項目は特に重要ですので必ずご記入をお願いします。数値は概算で構いません。入力内容はこの端末に自動で一時保存されます。</p>
+    <p>該当する項目をタップして選択し、空欄には分かる範囲でご記入ください（全30項目）。<span class="legend">★</span>の項目は特に重要ですので必ずご記入をお願いします。数値は概算で構いません。入力内容は保存されないため、記入後は「PDFで保存」を押してください。</p>
     <div class="meta">
-      <div><label for="m_date">記入日</label><input class="t" type="date" id="m_date" data-k="記入日"></div>
-      <div><label for="m_writer">ご記入者</label><input class="t" type="text" id="m_writer" data-k="ご記入者" autocomplete="name"></div>
+      <div><label for="m_date">記入日</label><input class="t" type="date" id="m_date" data-k="記入日" autocomplete="off"></div>
+      <div><label for="m_writer">ご記入者</label><input class="t" type="text" id="m_writer" data-k="ご記入者" autocomplete="off"></div>
     </div>
   </header>
-  <form id="form" onsubmit="return false"></form>
+  <form id="form" onsubmit="return false" autocomplete="off"></form>
 </div>
 
 <div class="bar"><div class="in">
@@ -236,7 +236,9 @@ function paint(){
   document.querySelectorAll('.chip').forEach(l=>l.classList.toggle('on',l.querySelector('input').checked));
 }
 let saveT;
-function save(){ clearTimeout(saveT); saveT=setTimeout(()=>{ try{localStorage.setItem(KEY,JSON.stringify(collect()));}catch(e){} },300); }
+let dirty=false;
+function save(){ dirty=true; }
+window.addEventListener('beforeunload',e=>{ if(dirty){ e.preventDefault(); e.returnValue=''; } });
 
 // radio toggle-off on second tap
 form.addEventListener('click',e=>{
@@ -257,15 +259,15 @@ function progress(){
 }
 
 // ---- Init ----
-try{ const s=localStorage.getItem(KEY); if(s) apply(JSON.parse(s)); }catch(e){}
+try{ localStorage.removeItem(KEY); }catch(e){}
 const dt=document.getElementById('m_date'); if(!dt.value){ const n=new Date(); dt.value=new Date(n-n.getTimezoneOffset()*6e4).toISOString().slice(0,10); }
 paint(); progress();
 
 document.getElementById('reset').onclick=()=>{
   if(!confirm('入力内容をすべて消去しますか？')) return;
   all().forEach(el=>{ if(el.type==='checkbox'||el.type==='radio') el.checked=false; else el.value=''; });
-  try{localStorage.removeItem(KEY);}catch(e){}
-  paint(); progress();
+  const n=new Date(); dt.value=new Date(n-n.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+  dirty=false; paint(); progress();
 };
 
 function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3200); }
@@ -326,7 +328,7 @@ document.getElementById('pdf').onclick=async()=>{
     const a=document.createElement('a'); a.href=url; a.download=name;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(()=>URL.revokeObjectURL(url),10000);
-    toast('PDFを保存しました');
+    toast('PDFを保存しました'); dirty=false;
   }catch(e){ console.error(e); toast('PDFの作成に失敗しました'); }
   finally{ btn.disabled=false; btn.textContent='PDFで保存'; }
 };
