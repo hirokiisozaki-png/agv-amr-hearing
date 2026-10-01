@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AGV/AMR導入ヒアリングシート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f1ec; --paper:#ffffff; --ink:#1d2430; --sub:#5b6472; --line:#d9d5cc;
+  --accent:#1f4e79; --accent-soft:#e3ecf5; --key:#c77700; --key-soft:#fff3df;
+  --field:#faf9f6; --on:#1f4e79; --on-ink:#ffffff;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14181e; --paper:#1c222b; --ink:#e8eaee; --sub:#9aa3b0; --line:#323a46;
+    --accent:#7fb0e0; --accent-soft:#22324a; --key:#f0a838; --key-soft:#3a2c14;
+    --field:#161b22; --on:#7fb0e0; --on-ink:#0f141a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14181e; --paper:#1c222b; --ink:#e8eaee; --sub:#9aa3b0; --line:#323a46;
+  --accent:#7fb0e0; --accent-soft:#22324a; --key:#f0a838; --key-soft:#3a2c14;
+  --field:#161b22; --on:#7fb0e0; --on-ink:#0f141a;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"BIZ UDPGothic","Hiragino Sans","Yu Gothic","Meiryo",system-ui,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 120px}
+header.top{padding:28px 0 18px;border-bottom:3px solid var(--ink);margin-bottom:20px}
+header.top h1{font-size:clamp(1.5rem,4.5vw,2.1rem);margin:0;letter-spacing:.02em;line-height:1.3}
+header.top p{margin:10px 0 0;color:var(--sub);font-size:.95rem;max-width:60ch}
+.legend{display:inline-flex;align-items:center;gap:6px;color:var(--key);font-weight:700}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:18px 0 6px}
+.meta label{display:block;font-size:.85rem;color:var(--sub)}
+section.sec{background:var(--paper);border:1px solid var(--line);border-radius:10px;margin:18px 0;overflow:hidden}
+section.sec>h2{margin:0;padding:12px 16px;font-size:1.08rem;background:var(--accent-soft);color:var(--ink);border-bottom:1px solid var(--line)}
+.item{display:grid;grid-template-columns:220px 1fr;gap:10px 18px;padding:14px 16px;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:0}
+.item.key{background:var(--key-soft)}
+.q{font-weight:700;font-size:.98rem}
+.q .no{display:inline-block;min-width:2.1em;color:var(--sub);font-weight:400}
+.q .star{color:var(--key)}
+.hint{display:block;font-weight:400;font-size:.82rem;color:var(--sub);margin-top:4px}
+.a{display:flex;flex-direction:column;gap:10px;min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sublabel{font-size:.82rem;color:var(--sub);width:100%;margin-bottom:-2px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border:1.5px solid var(--line);border-radius:999px;
+  background:var(--field);cursor:pointer;user-select:none;font-size:.95rem;min-height:44px;line-height:1.2}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip .box{width:18px;height:18px;border:2px solid var(--sub);border-radius:4px;flex:none;display:grid;place-items:center}
+.chip.radio .box{border-radius:50%}
+.chip.on{background:var(--on);border-color:var(--on);color:var(--on-ink)}
+.chip.on .box{border-color:var(--on-ink);background:var(--on-ink)}
+.chip.on .box::after{content:"";width:8px;height:8px;border-radius:2px;background:var(--on)}
+.chip.radio.on .box::after{border-radius:50%}
+.chip:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+input.t,textarea.t{font:inherit;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:8px;
+  padding:10px 12px;min-height:44px;width:100%;font-size:16px}
+textarea.t{min-height:88px;resize:vertical}
+input.t:focus,textarea.t:focus{outline:none;border-color:var(--accent)}
+.num{display:inline-flex;align-items:center;gap:6px}
+.num span{font-size:.9rem;color:var(--sub);white-space:nowrap}
+.num input.t{width:7.5em}
+.num.wide input.t{width:12em}
+.other{width:min(100%,16em)}
+.note{font-size:.85rem;color:var(--sub);padding:0 16px 14px;margin:0}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));z-index:10}
+.bar .in{max-width:860px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.prog{flex:1;min-width:160px;font-size:.88rem;color:var(--sub)}
+.prog b{color:var(--key)}
+button{font:inherit;border-radius:8px;padding:11px 18px;min-height:44px;cursor:pointer;border:1.5px solid var(--line);background:var(--field);color:var(--ink)}
+button.pri{background:var(--accent);border-color:var(--accent);color:var(--paper);font-weight:700}
+button:disabled{opacity:.6;cursor:wait}
+.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:8px;font-size:.9rem;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20;max-width:90vw}
+.toast.show{opacity:1}
+@media (max-width:640px){
+  .item{grid-template-columns:1fr;gap:8px}
+  .wrap{padding:12px 12px 130px}
+}
+/* PDF report (offscreen, always light) */
+#report{position:absolute;left:-10000px;top:0;width:794px;background:#fff;color:#111;
+  font-family:"BIZ UDPGothic","Hiragino Sans","Yu Gothic","Meiryo",sans-serif;font-size:12px;line-height:1.5}
+#report .blk{padding:0 36px}
+#report h1{font-size:20px;margin:0;padding:32px 0 8px;border-bottom:2px solid #111}
+#report .rm{display:flex;flex-wrap:wrap;gap:4px 24px;padding:8px 0 4px;color:#333}
+#report h2{font-size:13px;margin:14px 0 0;padding:5px 8px;background:#e3ecf5;border:1px solid #c9d3de;border-bottom:0}
+#report table{width:100%;border-collapse:collapse;table-layout:fixed}
+#report td{border:1px solid #c9d3de;padding:5px 8px;vertical-align:top;word-break:break-all}
+#report td.k{width:34%;background:#fafafa;font-weight:700}
+#report tr.key td.k{background:#fff3df}
+#report .empty{color:#aaa}
+@media print{
+  .bar,.toast{display:none}
+  body{background:#fff}
+  section.sec{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>AGV/AMR導入ヒアリングシート</h1>
+    <p>該当する項目をタップして選択し、空欄には分かる範囲でご記入ください（全30項目）。<span class="legend">★</span>の項目は特に重要ですので必ずご記入をお願いします。数値は概算で構いません。入力内容はこの端末に自動で一時保存されます。</p>
+    <div class="meta">
+      <div><label for="m_date">記入日</label><input class="t" type="date" id="m_date" data-k="記入日"></div>
+      <div><label for="m_writer">ご記入者</label><input class="t" type="text" id="m_writer" data-k="ご記入者" autocomplete="name"></div>
+    </div>
+  </header>
+  <form id="form" onsubmit="return false"></form>
+</div>
+
+<div class="bar"><div class="in">
+  <div class="prog" id="prog"></div>
+  <button type="button" id="reset">クリア</button>
+  <button type="button" class="pri" id="pdf">PDFで保存</button>
+</div></div>
+<div class="toast" id="toast"></div>
+<div id="report"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// ---- Form definition ----
+// part types: text, area, check, radio, num(label,unit,wide), sub(label)
+const C=(n,o,other)=>({t:'check',n,o,other});
+const R=(n,o,other)=>({t:'radio',n,o,other});
+const N=(n,l,u,wide)=>({t:'num',n,l,u,wide});
+const T=(n,ph,ac)=>({t:'text',n,ph,ac});
+const A=(n,ph)=>({t:'area',n,ph});
+const S=(l)=>({t:'sub',l});
+
+const SECTIONS=[
+ {h:'1. 基本情報',items:[
+  {no:1,q:'貴社名',p:[T('company','株式会社〇〇','organization')]},
+  {no:2,q:'対象拠点名・所在地',p:[T('site','〇〇工場（〇〇県〇〇市）')]},
+  {no:3,q:'ご担当者（部署・お名前）',p:[T('person','製造部　山田 太郎')]},
+  {no:4,q:'連絡先（電話・メール）',p:[T('tel','電話番号','tel'),T('mail','メールアドレス','email')]},
+ ]},
+ {h:'2. 導入目的・課題・時期・予算',items:[
+  {no:5,q:'自動化したい理由',hint:'複数選択可',p:[C('reason',['人手不足','省人化・コスト削減','作業負担の軽減','安全性の向上','搬送ミスの削減'],true)]},
+  {no:6,q:'現在困っていること',p:[A('trouble','例：搬送に1日あたり2名分の工数がかかっている')]},
+  {no:7,q:'現在の搬送方法・担当人数',p:[C('method',['人手（台車など）','フォークリフト','コンベア'],true),
+     {t:'group',p:[N('m_ppl','担当','名'),N('m_hr','×','時間/日')]}]},
+  {no:8,q:'導入希望時期',p:[R('when',['半年以内','1年以内','1年以上先','未定']),N('when_d','希望','頃',true)]},
+  {no:9,q:'ご予算',p:[R('budget',['予算あり','未定']),N('budget_v','約','万円程度'),C('subsidy',['補助金の活用を検討'])]},
+  {no:10,q:'検討状況・決裁の流れ',p:[R('stage',['情報収集段階','具体的に検討中','他社も比較検討中']),T('approver','決裁者（例：工場長）')]},
+ ]},
+ {h:'3. 走行環境',items:[
+  {no:11,key:1,q:'屋内／屋外',p:[R('inout',['屋内のみ','屋外あり']),S('屋外ありの場合'),C('outdoor',['屋根あり','雨天時も走行'])]},
+  {no:12,key:1,q:'最小通路幅',hint:'ルート上で最も狭い箇所。棚・柱・置き物を除いた実際に通れる幅',
+   p:[{t:'group',p:[N('aisle','幅','mm')]},T('aisle_where','場所（例：第2倉庫入口）'),
+      S('すれ違いエリアの拡大（すれ違い用に通路の一部を広げられるか）'),
+      R('pass',['拡大可能','拡大不可','要相談']),
+      S('拡大可能な場合の寸法'),
+      {t:'group',p:[N('pass_w','幅','mm'),N('pass_l','長さ','mm')]},T('pass_where','拡大できる場所')]},
+  {no:13,key:1,q:'路面状態',hint:'複数選択可',p:[S('材質'),C('floor',['コンクリート','塗床','アスファルト'],true),
+     S('状態'),C('cond',['平滑','凹凸・ひび割れ','水濡れ','油汚れ','粉塵'])]},
+  {no:14,q:'段差・溝・スロープ',p:[R('step',['なし','あり']),
+     {t:'group',p:[N('step_h','段差','mm'),N('groove','溝幅','mm'),N('slope','勾配','°')]}]},
+  {no:15,q:'周囲環境',p:[{t:'group',p:[N('temp_lo','温度','℃ 〜'),N('temp_hi','','℃')]},
+     C('env',['結露あり','暗い場所あり','防爆・クリーンルーム指定あり'])]},
+ ]},
+ {h:'4. 搬送物',items:[
+  {no:16,q:'搬送物の種類・荷姿',p:[T('goods','品名（例：成形品、部品箱）'),C('pack',['パレット','カゴ台車','コンテナ・通い箱','段ボール'],true)]},
+  {no:17,key:1,q:'荷物の重さ（1回の搬送あたり）',hint:'台車・パレットの重量を含む',p:[{t:'group',p:[N('w_max','最大','kg'),N('w_avg','平均','kg')]}]},
+  {no:18,q:'荷物サイズ',p:[{t:'group',p:[N('s_l','縦','mm'),N('s_w','横','mm'),N('s_h','高さ','mm')]},C('multi',['複数サイズあり'])]},
+  {no:19,q:'積み下ろしの方法（希望）',p:[C('load',['人手','台車ごと牽引・潜り込み','コンベアで移載','リフト','ロボットアーム','未定'])]},
+  {no:20,q:'荷物の注意点',p:[C('care',['荷崩れしやすい','液体','破損しやすい','重心が高い','特になし'])]},
+ ]},
+ {h:'5. 搬送条件・稼働時間',items:[
+  {no:21,q:'搬送ルート（どこからどこへ）',p:[T('from','出発地点'),T('to','到着地点'),{t:'group',p:[N('stops','立寄り地点','か所')]},C('layout',['レイアウト図を提供可能'])]},
+  {no:22,q:'片道の搬送距離',p:[{t:'group',p:[N('dist','約','m')]}]},
+  {no:23,q:'搬送回数',hint:'ピーク時の回数が必要台数を決めます',p:[{t:'group',p:[N('cnt_day','平常','回/日'),N('cnt_peak','ピーク時','回/時間')]}]},
+  {no:24,q:'1サイクルの時間',hint:'積込→搬送→荷降ろし→戻りまで',p:[{t:'group',p:[N('cycle','現状 約','分'),N('cycle_ld','うち積み下ろし','分')]}]},
+  {no:25,q:'1日の稼働時間',p:[{t:'group',p:[N('op_from','','時 〜'),N('op_to','','時')]},R('shift',['1直','2直','24時間']),{t:'group',p:[N('days','稼働日','日/月')]}]},
+ ]},
+ {h:'6. 設備・インフラ・安全',items:[
+  {no:26,q:'ルート上の扉・シャッター・エレベーター',p:[C('door',['なし','自動扉','手動扉','シャッター','エレベーター']),{t:'group',p:[N('floors','エレベーター','階間')]}]},
+  {no:27,q:'人・フォークリフトとの混在',p:[C('mix',['人が多く行き来する','フォークリフトが走行する','専用通路を設けられる','ほぼ無人'])]},
+  {no:28,q:'通信環境（Wi-Fi）',p:[R('wifi',['ルート全域で利用可','一部のみ','なし','不明'])]},
+  {no:29,q:'充電場所・電源',p:[C('power',['充電スペースあり','AC100V','AC200V','未確認']),{t:'group',p:[N('charge_area','スペース 約','m²')]}]},
+  {no:30,q:'他システム・設備との連携',p:[C('link',['不要','生産設備・コンベア','WMS・生産管理システム','パトライト・呼出ボタン'],true)]},
+ ]},
+ {h:'その他・ご要望',items:[
+  {no:'',q:'備考・ご要望',p:[A('memo','自由にご記入ください')]},
+ ]},
+];
+
+// ---- Render ----
+const form=document.getElementById('form');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let uid=0;
+function partHTML(p){
+  if(p.t==='text') return `<input class="t" type="${p.ac==='tel'?'tel':p.ac==='email'?'email':'text'}" data-k="${p.n}" placeholder="${esc(p.ph||'')}" ${p.ac?`autocomplete="${p.ac}"`:''}>`;
+  if(p.t==='area') return `<textarea class="t" data-k="${p.n}" placeholder="${esc(p.ph||'')}"></textarea>`;
+  if(p.t==='sub') return `<div class="sublabel">${esc(p.l)}</div>`;
+  if(p.t==='num') return `<label class="num${p.wide?' wide':''}">${p.l?`<span>${esc(p.l)}</span>`:''}<input class="t" type="text" inputmode="${p.wide?'text':'decimal'}" data-k="${p.n}"><span>${esc(p.u)}</span></label>`;
+  if(p.t==='group') return `<div class="row">${p.p.map(partHTML).join('')}</div>`;
+  if(p.t==='check'||p.t==='radio'){
+    const type=p.t==='check'?'checkbox':'radio';
+    let h=`<div class="row">`+p.o.map(o=>`<label class="chip ${p.t}"><input type="${type}" name="${p.n}" value="${esc(o)}" data-k="${p.n}"><span class="box"></span>${esc(o)}</label>`).join('');
+    if(p.other) h+=`<label class="chip ${p.t}"><input type="${type}" name="${p.n}" value="その他" data-k="${p.n}"><span class="box"></span>その他</label><input class="t other" type="text" data-k="${p.n}_other" placeholder="その他の内容">`;
+    return h+`</div>`;
+  }
+  return '';
+}
+form.innerHTML=SECTIONS.map(s=>`<section class="sec"><h2>${esc(s.h)}</h2>${s.items.map(it=>`
+  <div class="item${it.key?' key':''}" data-no="${it.no}">
+    <div class="q">${it.no!==''?`<span class="no">${it.no}</span>`:''}${it.key?'<span class="star">★</span>':''}${esc(it.q)}${it.hint?`<span class="hint">${esc(it.hint)}</span>`:''}</div>
+    <div class="a">${it.p.map(partHTML).join('')}</div>
+  </div>`).join('')}</section>`).join('');
+
+// ---- State / storage ----
+const KEY='agv-amr-hearing-v1';
+const all=()=>document.querySelectorAll('[data-k]');
+function collect(){
+  const d={};
+  all().forEach(el=>{
+    const k=el.dataset.k;
+    if(el.type==='checkbox'){ d[k]=d[k]||[]; if(el.checked) d[k].push(el.value); }
+    else if(el.type==='radio'){ if(el.checked) d[k]=el.value; else if(!(k in d)) d[k]=''; }
+    else d[k]=el.value.trim();
+  });
+  return d;
+}
+function apply(d){
+  all().forEach(el=>{
+    const k=el.dataset.k; if(!(k in d)) return;
+    if(el.type==='checkbox') el.checked=(d[k]||[]).includes(el.value);
+    else if(el.type==='radio') el.checked=d[k]===el.value;
+    else el.value=d[k]||'';
+  });
+}
+function paint(){
+  document.querySelectorAll('.chip').forEach(l=>l.classList.toggle('on',l.querySelector('input').checked));
+}
+let saveT;
+function save(){ clearTimeout(saveT); saveT=setTimeout(()=>{ try{localStorage.setItem(KEY,JSON.stringify(collect()));}catch(e){} },300); }
+
+// radio toggle-off on second tap
+form.addEventListener('click',e=>{
+  const inp=e.target.closest('.chip.radio')?.querySelector('input'); if(!inp) return;
+  if(e.target.tagName==='INPUT') return;
+  if(inp.checked){ e.preventDefault(); inp.checked=false; paint(); progress(); save(); }
+});
+document.addEventListener('input',()=>{paint();progress();save();});
+document.addEventListener('change',()=>{paint();progress();save();});
+
+// ---- Progress of key items ----
+function progress(){
+  const d=collect();
+  const keys=[['屋内／屋外',!!d.inout],['最小通路幅',!!d.aisle],['路面状態',(d.floor||[]).length+(d.cond||[]).length>0],['荷物の重さ',!!(d.w_max||d.w_avg)]];
+  const done=keys.filter(k=>k[1]).length;
+  const miss=keys.filter(k=>!k[1]).map(k=>k[0]);
+  document.getElementById('prog').innerHTML=`★重要項目 <b>${done}/4</b> 記入済み${miss.length?`<br>未記入：${esc(miss.join('・'))}`:''}`;
+}
+
+// ---- Init ----
+try{ const s=localStorage.getItem(KEY); if(s) apply(JSON.parse(s)); }catch(e){}
+const dt=document.getElementById('m_date'); if(!dt.value){ const n=new Date(); dt.value=new Date(n-n.getTimezoneOffset()*6e4).toISOString().slice(0,10); }
+paint(); progress();
+
+document.getElementById('reset').onclick=()=>{
+  if(!confirm('入力内容をすべて消去しますか？')) return;
+  all().forEach(el=>{ if(el.type==='checkbox'||el.type==='radio') el.checked=false; else el.value=''; });
+  try{localStorage.removeItem(KEY);}catch(e){}
+  paint(); progress();
+};
+
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3200); }
+
+// ---- Report (answer text per item) ----
+function answerText(it,d){
+  const out=[];
+  const walk=(p)=>{
+    if(p.t==='group'){ const s=p.p.map(x=>{const v=d[x.n]; return v?`${x.l?x.l+' ':''}${v} ${x.u}`:'';}).filter(Boolean).join('　'); if(s) out.push(s); return; }
+    if(p.t==='num'){ const v=d[p.n]; if(v) out.push(`${p.l?p.l+' ':''}${v} ${p.u}`); return; }
+    if(p.t==='sub'){ out.push({sub:p.l}); return; }
+    if(p.t==='check'){ let v=(d[p.n]||[]).slice(); if(v.includes('その他')&&d[p.n+'_other']) v=v.map(x=>x==='その他'?`その他（${d[p.n+'_other']}）`:x); if(v.length) out.push(v.join('、')); return; }
+    if(p.t==='radio'){ if(d[p.n]) out.push(d[p.n]); return; }
+    const v=d[p.n]; if(v) out.push(v);
+  };
+  it.p.forEach(walk);
+  // attach sub labels only when followed by content
+  const res=[];
+  for(let i=0;i<out.length;i++){
+    if(typeof out[i]==='object'){ const nx=out[i+1]; if(nx&&typeof nx==='string'){ res.push(`【${out[i].sub}】${nx}`); i++; } }
+    else res.push(out[i]);
+  }
+  return res;
+}
+function buildReport(){
+  const d=collect(); const r=document.getElementById('report');
+  let h=`<div class="blk" data-b><h1>AGV/AMR導入ヒアリングシート</h1><div class="rm"><span>記入日：${esc(d['記入日']||'')}</span><span>ご記入者：${esc(d['ご記入者']||'')}</span><span>★＝重要項目</span></div></div>`;
+  SECTIONS.forEach(s=>{
+    h+=`<div class="blk" data-b><h2>${esc(s.h)}</h2><table>`+s.items.map(it=>{
+      const a=answerText(it,d);
+      return `<tr class="${it.key?'key':''}"><td class="k">${it.no!==''?it.no+'. ':''}${it.key?'★':''}${esc(it.q)}</td><td>${a.length?a.map(esc).join('<br>'):'<span class="empty">未記入</span>'}</td></tr>`;
+    }).join('')+`</table></div>`;
+  });
+  r.innerHTML=h; return {r,d};
+}
+
+document.getElementById('pdf').onclick=async()=>{
+  const btn=document.getElementById('pdf');
+  if(!window.html2canvas||!window.jspdf){ window.print(); return; }
+  btn.disabled=true; btn.textContent='作成中…';
+  try{
+    const {r,d}=buildReport();
+    try{ await document.fonts.ready; }catch(e){}
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({unit:'pt',format:'a4'});
+    const PW=pdf.internal.pageSize.getWidth(), PH=pdf.internal.pageSize.getHeight(), M=24;
+    let y=M;
+    for(const b of r.querySelectorAll('[data-b]')){
+      const cv=await html2canvas(b,{scale:2,backgroundColor:'#ffffff',logging:false});
+      const w=PW, h=cv.height*w/cv.width;
+      if(y+h>PH-M && y>M){ pdf.addPage(); y=M; }
+      pdf.addImage(cv.toDataURL('image/jpeg',0.92),'JPEG',0,y,w,h);
+      y+=h;
+    }
+    const blob=pdf.output('blob');
+    const name=`AGV_AMRヒアリングシート_${(d.company||'未記入').replace(/[\\/:*?"<>|]/g,'')}_${d['記入日']||''}.pdf`;
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download=name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),10000);
+    toast('PDFを保存しました');
+  }catch(e){ console.error(e); toast('PDFの作成に失敗しました'); }
+  finally{ btn.disabled=false; btn.textContent='PDFで保存'; }
+};
+</script>
+</body>
+</html>
